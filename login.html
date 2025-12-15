@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>PAY54 • Sign in</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#020617" />
+
+  <link rel="icon" href="assets/img/logo/pay54-icon.svg" />
+  <link rel="stylesheet" href="assets/css/global.css" />
+  <link rel="stylesheet" href="assets/css/auth.css" />
+</head>
+
+<body class="auth-body">
+
+  <!-- DEMO BANNER -->
+  <div class="demo-banner">
+    🔒 PAY54 DEMO VERSION — Wallet UI simulation only.
+  </div>
+
+  <div class="auth-wrapper">
+
+    <!-- HEADER -->
+    <header class="auth-header">
+      <div class="auth-logo-pill">P54</div>
+      <div class="auth-brand">
+        <strong>PAY54</strong>
+        <span>One Wallet Everywhere • NG ↔ Global</span>
+      </div>
+    </header>
+
+    <div class="auth-layout">
+
+      <!-- LOGIN CARD -->
+      <main class="auth-card">
+        <h1>Sign in to PAY54</h1>
+        <p class="auth-sub">
+          Secure login • PIN + device
+        </p>
+
+        <form id="loginForm">
+          <label>Email or phone</label>
+          <input id="loginId" required />
+
+          <label>Wallet PIN (4 digits)</label>
+          <div class="pin-row">
+            <input id="loginPin" type="password" maxlength="4" required />
+            <button type="button" data-eye="loginPin">👁</button>
+          </div>
+
+          <div class="login-row">
+            <label>
+              <input type="checkbox" />
+              Remember this device
+            </label>
+            <a href="reset-pin.html">Forgot PIN?</a>
+          </div>
+
+          <button class="btn-primary" type="submit">
+            Sign in to PAY54
+          </button>
+        </form>
+
+        <p class="auth-footer">
+          New to PAY54?
+          <a href="signup.html">Create account</a>
+        </p>
+      </main>
+
+      <!-- WHY PAY54 -->
+      <aside class="auth-side">
+        <h2>Why PAY54?</h2>
+        <ul>
+          <li>⚡ Instant P2P transfers & bank payouts</li>
+          <li>🌍 FX rails (NGN ⇄ USD / GBP / EUR)</li>
+          <li>💳 Virtual & linked cards</li>
+          <li>🛡 Secure PIN & device checks</li>
+          <li>💰 Savings, investments & bills</li>
+        </ul>
+      </aside>
+
+    </div>
+  </div>
+
+  <!-- JS (MODULES — THIS IS CRITICAL) -->
+  <script type="module" src="assets/js/core/session.js"></script>
+  <script type="module" src="assets/js/auth/auth.js"></script>
+
+</body>
+</html>

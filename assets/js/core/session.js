@@ -1,73 +1,36 @@
-/* =========================================================
-   PAY54 v7.1 — Session Guard & Role Locking
-   Enforces auth rules across HTML pages
-   ========================================================= */
+// session.js – simple front-end session protection
 
-import { getUser, getSession, clearAllState } from "./state.js";
+(function () {
+  const SESSION_KEY = "pay54_session_active";
 
-/* -------------------------
-   Page definitions
--------------------------- */
-const PUBLIC_PAGES = [
-  "index.html",
-  "signup.html",
-  "reset-pin.html",
-  "otp.html"
-];
+  function sessionActive() {
+    return localStorage.getItem(SESSION_KEY) === "1";
+  }
 
-const PROTECTED_PAGES = [
-  "dashboard.html"
-];
-
-/* -------------------------
-   Helpers
--------------------------- */
-function currentPage() {
   const path = window.location.pathname;
-  return path.substring(path.lastIndexOf("/") + 1);
-}
 
-function redirect(to) {
-  window.location.replace(to);
-}
-
-/* -------------------------
-   Core guard logic
--------------------------- */
-export function enforceSession() {
-  const page = currentPage();
-  const user = getUser();
-  const session = getSession();
-
-  const isPublic = PUBLIC_PAGES.includes(page);
-  const isProtected = PROTECTED_PAGES.includes(page);
-
-  // 🔒 Not logged in → block dashboard
-  if (isProtected && (!user || !session?.loggedIn)) {
-    clearAllState();
-    redirect("index.html");
-    return;
+  // Protect dashboard
+  if (path.endsWith("dashboard.html")) {
+    if (!sessionActive()) {
+      window.location.href = "index.html";
+    }
   }
 
-  // 🔁 Logged in → block auth pages
-  if (isPublic && user && session?.loggedIn) {
-    redirect("dashboard.html");
-    return;
+  // Optional: redirect logged-in users away from login page
+  if (path.endsWith("index.html") || path.endsWith("login.html") || path === "/") {
+    if (sessionActive()) {
+      // you can auto-forward them if you want:
+      // window.location.href = "dashboard.html";
+    }
   }
-}
 
-/* -------------------------
-   Logout helper
--------------------------- */
-export function logout() {
-  clearAllState();
-  redirect("index.html");
-}
-
-/* -------------------------
-   Auto-run on load
--------------------------- */
-document.addEventListener("DOMContentLoaded", () => {
-  enforceSession();
-});
+  // Logout button
+  const btnLogout = document.getElementById("btnLogout");
+  if (btnLogout) {
+    btnLogout.addEventListener("click", () => {
+      localStorage.removeItem(SESSION_KEY);
+      window.location.href = "index.html";
+    });
+  }
+})();
 

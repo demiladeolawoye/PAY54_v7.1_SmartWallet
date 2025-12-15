@@ -1,1 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>PAY54 • Smart Wallet Dashboard</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
+  <!-- Base + dashboard styles -->
+  <link rel="stylesheet" href="assets/css/theme.css" />
+  <link rel="stylesheet" href="assets/css/dashboard.css" />
+</head>
+
+<body class="pay54-body">
+  <div class="dashboard-shell">
+
+    <!-- HEADER -->
+    <header class="pay54-header">
+      <div class="brand-block">
+        <div class="brand-logo">
+          <!-- ✅ v6.7 P54 logo (single source of truth) -->
+          <img src="assets/img/pay54-logo.svg" alt="PAY54" />
+        </div>
+
+        <div class="brand-text">
+          <div class="brand-title">
+            PAY54 Wallet • v7.0
+            <!-- ✅ Light/Dark toggle AFTER title -->
+            <button class="chip chip-mode" id="modeToggle" type="button" aria-label="Toggle theme">◐ Dark</button>
+          </div>
+          <div class="brand-sub">ONE WALLET. EVERYWHERE.</div>
+        </div>
+      </div>
+
+      <div class="header-right">
+        <!-- ✅ Currency row text (NOT symbols) -->
+        <div class="currency-toggle" id="currencyToggle">
+          <button class="chip chip-active" data-currency="NGN" type="button">NGN</button>
+          <button class="chip" data-currency="USD" type="button">USD</button>
+          <button class="chip" data-currency="GBP" type="button">GBP</button>
+          <button class="chip" data-currency="EUR" type="button">EUR</button>
+        </div>
+
+        <button class="btn-logout" id="logoutBtn" type="button">Logout</button>
+
+        <button class="profile-pill" id="profileBtn" type="button">
+          <span class="profile-avatar" id="profileAvatar">P</span>
+          <span class="profile-meta">
+            <span class="profile-name" id="profileName">PAY54 User</span>
+            <span class="profile-tag" id="profileTagLine">@pay54demo</span>
+          </span>
+        </button>
+      </div>
+    </header>
+
+    <!-- ✅ ORDER ENFORCED (Web + Mobile) -->
+    <main class="dashboard-grid" id="dashMain">
+
+      <!-- 1) BALANCE -->
+      <section class="card-glass balance-card" id="sectionBalance">
+        <div class="balance-header-row">
+          <div class="balance-label">TOTAL BALANCE</div>
+        </div>
+
+        <div class="balance-main-row">
+          <div class="balance-amount" id="walletBalance">₦0.00</div>
+        </div>
+
+        <!-- ✅ Option A (approved): NGN account only + Tag + KYC + stamps -->
+        <div class="account-grid" style="grid-template-columns: 1fr;">
+          <div class="account-col">
+            <div class="account-row">
+              <span class="account-label">NGN Account:</span>
+              <span class="account-value" id="ngnAccountNo">012 345 6789</span>
+            </div>
+
+            <div class="account-row">
+              <span class="account-label">Tag ID:</span>
+              <span class="account-value" id="payTag">@pay54demo</span>
+            </div>
+
+            <div class="account-row">
+              <span class="account-label">KYC Level:</span>
+              <span class="account-value" id="kycLevel">Tier 2 · Verified (Demo)</span>
+            </div>
+
+            <div class="account-row">
+              <span class="account-label">Security & Finance:</span>
+              <span class="account-value">PCI-DSS • AML/CFT • Sandbox</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="balance-controls-row">
+          <button class="btn-pill" id="btnAddMoney" type="button">Add money</button>
+          <button class="btn-pill btn-outline" id="btnWithdraw" type="button">Withdraw</button>
+          <button class="btn-pill btn-outline" id="btnShareDetails" type="button">Share</button>
+        </div>
+
+        <!-- Security & financial stamps -->
+        <div class="balance-meta">
+          <div>Security: Device • Wallet PIN • AI Risk Watch (Demo)</div>
+          <div>Financial Stamps: PCI-DSS • AML/CFT • PAY54 Sandbox</div>
+        </div>
+      </section>
+
+      <!-- 2) QUICK SHORTCUTS -->
+      <section class="card-glass section-card quick-shortcuts-card" id="sectionShortcuts">
+        <header class="section-header">
+          <h2>Quick Shortcuts</h2>
+          <p>Fast access to key actions</p>
+        </header>
+
+        <div class="quick-grid">
+          <button class="chip wide-chip" id="qsAgent" type="button">Become an Agent</button>
+          <button class="chip wide-chip" id="qsSavings" type="button">Open Savings Pot</button>
+          <button class="chip wide-chip" id="qsShop" type="button">Shop on the Fly</button>
+          <button class="chip wide-chip" id="qsInvest" type="button">Invest & Stocks</button>
+        </div>
+      </section>
+
+      <!-- 3) MONEY MOVES -->
+      <section class="card-glass section-card" id="sectionMoneyMoves">
+        <header class="section-header">
+          <h2>Money Moves</h2>
+          <p>Instant P2P + banks + QR requests</p>
+        </header>
+
+        <div class="grid-2">
+          <button class="tile-btn" id="mmSend" type="button">
+            <span class="tile-title">Send PAY54 → PAY54</span>
+            <span class="tile-sub">Instant P2P transfers</span>
+          </button>
+
+          <button class="tile-btn" id="mmReceive" type="button">
+            <span class="tile-title">Receive</span>
+            <span class="tile-sub">Show account, tag &amp; QR</span>
+          </button>
+
+          <button class="tile-btn" id="mmAdd" type="button">
+            <span class="tile-title">Add money</span>
+            <span class="tile-sub">Card • Bank • Agents</span>
+          </button>
+
+          <button class="tile-btn" id="mmWithdraw" type="button">
+            <span class="tile-title">Withdraw</span>
+            <span class="tile-sub">Bank • Agents</span>
+          </button>
+
+          <button class="tile-btn" id="mmBankTransfer" type="button">
+            <span class="tile-title">Bank transfer</span>
+            <span class="tile-sub">To banks &amp; wallets</span>
+          </button>
+
+          <button class="tile-btn" id="mmRequest" type="button">
+            <span class="tile-title">Request money</span>
+            <span class="tile-sub">With notification list</span>
+          </button>
+        </div>
+      </section>
+
+      <!-- 4) SERVICES -->
+      <section class="card-glass section-card" id="sectionServices">
+        <header class="section-header">
+          <h2>Services</h2>
+          <p>FX, bills, cards, checkout, agents &amp; more</p>
+        </header>
+
+        <div class="grid-2">
+          <button class="tile-btn" id="svcFx" type="button">
+            <span class="tile-title">Cross-border FX</span>
+            <span class="tile-sub">USD/GBP/EUR → Africa payouts</span>
+          </button>
+
+          <button class="tile-btn" id="svcSavings" type="button">
+            <span class="tile-title">Savings</span>
+            <span class="tile-sub">Goals &amp; pots</span>
+          </button>
+
+          <button class="tile-btn" id="svcBills" type="button">
+            <span class="tile-title">Pay bills</span>
+            <span class="tile-sub">(Airtime/Data/Power/TV)</span>
+          </button>
+
+          <button class="tile-btn" id="svcCards" type="button">
+            <span class="tile-title">Virtual &amp; linked cards</span>
+            <span class="tile-sub">Freeze • default • add</span>
+          </button>
+
+          <button class="tile-btn" id="svcCheckout" type="button">
+            <span class="tile-title">PAY54 Smart Checkout</span>
+            <span class="tile-sub">Approve e-commerce payments</span>
+          </button>
+
+          <button class="tile-btn" id="svcShop" type="button">
+            <span class="tile-title">Shop on the Fly</span>
+            <span class="tile-sub">Taxi • Food • Tickets • Shops</span>
+          </button>
+
+          <button class="tile-btn" id="svcInvest" type="button">
+            <span class="tile-title">Investments &amp; stocks</span>
+            <span class="tile-sub">Portfolio + FX conversion</span>
+          </button>
+
+          <button class="tile-btn" id="svcBet" type="button">
+            <span class="tile-title">Bet funding</span>
+            <span class="tile-sub">+18 age verification</span>
+          </button>
+
+          <button class="tile-btn" id="svcRisk" type="button">
+            <span class="tile-title">AI Risk Watch</span>
+            <span class="tile-sub">Suspicious activity alerts</span>
+          </button>
+
+          <button class="tile-btn" id="svcAgent" type="button">
+            <span class="tile-title">Become an Agent</span>
+            <span class="tile-sub">Apply • earn • receipts</span>
+          </button>
+        </div>
+      </section>
+
+      <!-- 5) RECENT TRANSACTIONS -->
+      <section class="card-glass section-card" id="sectionTransactions">
+        <header class="section-header section-header-row">
+          <div>
+            <h2>Recent Transactions</h2>
+          </div>
+          <button class="chip chip-small" id="btnViewAllTx" type="button">View all</button>
+        </header>
+
+        <ul class="tx-list" id="txList"></ul>
+        <div class="empty-state" id="txEmpty" style="display:none;">
+          No transactions yet.
+        </div>
+      </section>
+
+      <!-- 6) REQUESTS & ALERTS -->
+      <section class="card-glass section-card requests-card" id="sectionRequests">
+        <header class="section-header section-header-row">
+          <div>
+            <h2>Requests &amp; Alerts</h2>
+          </div>
+          <button class="chip chip-small" id="btnClearAlerts" type="button">Clear all</button>
+        </header>
+
+        <ul class="requests-list" id="requestsList"></ul>
+        <div class="empty-state" id="requestsEmpty">
+          No requests or alerts yet.
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- PROFILE DROPDOWN (mini modal) -->
+  <div class="modal-overlay" id="profileOverlay" aria-hidden="true">
+    <div class="modal card-glass" style="max-width:420px;">
+      <header class="modal-header">
+        <h3>Profile</h3>
+        <button class="modal-close" id="profileClose" type="button">×</button>
+      </header>
+      <div class="modal-body" id="profileBody"></div>
+      <footer class="modal-footer">
+        <button class="btn-pill btn-outline" id="profileSettings" type="button">Settings (future)</button>
+        <button class="btn-pill" id="profileSupport" type="button">Support Centre</button>
+        <button class="btn-pill btn-outline" id="profileLogout" type="button">Logout</button>
+      </footer>
+    </div>
+  </div>
+
+  <!-- ACTION MODAL -->
+  <div class="modal-overlay" id="modalOverlay" aria-hidden="true">
+    <div class="modal card-glass" id="modalCard">
+      <header class="modal-header">
+        <h3 id="modalTitle">Action</h3>
+        <button class="modal-close" id="modalClose" type="button">×</button>
+      </header>
+      <div class="modal-body" id="modalBody"></div>
+      <footer class="modal-footer" id="modalFooter">
+        <button class="btn-pill" id="modalPrimary" type="button">Continue</button>
+      </footer>
+    </div>
+  </div>
+
+  <!-- TOAST -->
+  <div class="toast" id="toast"></div>
+
+  <!-- ✅ Functional wiring -->
+  <script type="module" src="assets/js/ui/dashboardUI.js"></script>
+</body>
+</html>

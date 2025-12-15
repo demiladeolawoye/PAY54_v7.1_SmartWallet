@@ -6,13 +6,13 @@
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="description"
-        content="Sign in to PAY54 Smart Wallet – Hybrid NGN + Global wallet." />
+        content="PAY54 – One Wallet Everywhere • NG ↔ Global" />
   <meta name="theme-color" content="#020617" />
 
-  <!-- Icons -->
+  <!-- Icon -->
   <link rel="icon" type="image/svg+xml" href="assets/img/logo/pay54-icon.svg" />
 
-  <!-- Core styles -->
+  <!-- Styles -->
   <link rel="stylesheet" href="assets/css/global.css" />
   <link rel="stylesheet" href="assets/css/auth.css" />
 </head>
@@ -26,14 +26,15 @@
       <div class="auth-logo-pill"></div>
       <div class="auth-brand-block">
         <span class="auth-brand">PAY54</span>
-        <span class="auth-sub">Hybrid Money • NG ↔ Global</span>
+        <span class="auth-sub">
+          One Wallet Everywhere • NG ↔ Global
+        </span>
       </div>
     </header>
 
-    <!-- Main layout -->
     <div class="auth-layout">
 
-      <!-- LEFT: Login card -->
+      <!-- LOGIN CARD -->
       <main class="auth-card">
         <h1 class="auth-title">Sign in to PAY54</h1>
         <p class="auth-subtitle">
@@ -43,51 +44,29 @@
         <form id="loginForm" class="auth-form">
 
           <div class="form-group">
-            <label for="loginId">Email or phone</label>
-            <input
-              id="loginId"
-              name="loginId"
-              type="text"
-              placeholder="e.g. demi@example.com"
-              required
-            />
+            <label>Email or phone</label>
+            <input id="loginId" required />
           </div>
 
           <div class="form-group">
-            <label for="loginPin">Wallet PIN (4 digits)</label>
+            <label>Wallet PIN (4 digits)</label>
             <div class="password-row">
-              <input
-                id="loginPin"
-                name="loginPin"
-                type="password"
-                maxlength="4"
-                inputmode="numeric"
-                placeholder="••••"
-                required
-              />
-              <button
-                type="button"
-                class="eye-toggle"
-                data-target="loginPin"
-                aria-label="Toggle PIN visibility">
-                👁
-              </button>
+              <input id="loginPin" type="password" maxlength="4" required />
+              <button type="button" class="eye-toggle" data-target="loginPin">👁</button>
             </div>
           </div>
 
           <div class="form-row">
             <label class="remember-check">
-              <input type="checkbox" id="rememberMe" />
+              <input type="checkbox" />
               <span>Remember this device</span>
             </label>
-
             <a href="reset-pin.html" class="link-small">Forgot PIN?</a>
           </div>
 
-          <button type="submit" class="btn-primary">
+          <button class="btn-primary" type="submit">
             Sign in to PAY54
           </button>
-
         </form>
 
         <div class="auth-footer-text">
@@ -96,31 +75,16 @@
         </div>
       </main>
 
-      <!-- RIGHT: Why PAY54 -->
+      <!-- WHY PAY54 -->
       <aside class="auth-side">
         <h2 class="why-title">Why PAY54?</h2>
 
         <ul class="why-list">
-          <li>
-            <span class="why-icon">⚡</span>
-            <span>Instant P2P transfers and bank payouts across NGN & FX rails.</span>
-          </li>
-          <li>
-            <span class="why-icon">🌍</span>
-            <span>Cross-border FX rails (NGN ⇄ USD / GBP / EUR).</span>
-          </li>
-          <li>
-            <span class="why-icon">💳</span>
-            <span>Virtual & linked cards, Smart Checkout and Shop on the Fly.</span>
-          </li>
-          <li>
-            <span class="why-icon">🛡</span>
-            <span>Secure PIN, device checks and clear risk alerts.</span>
-          </li>
-          <li>
-            <span class="why-icon">💰</span>
-            <span>Savings pots, investments, stocks, bills & bet funding.</span>
-          </li>
+          <li>⚡ Instant P2P transfers and bank payouts across NGN & FX rails.</li>
+          <li>🌍 Cross-border FX rails (NGN ⇄ USD / GBP / EUR).</li>
+          <li>💳 Virtual & linked cards, Smart Checkout and Shop on the Fly.</li>
+          <li>🛡 Secure PIN, device checks and clear risk alerts.</li>
+          <li>💰 Savings pots, investments, stocks, bills & bet funding.</li>
         </ul>
 
         <p class="auth-banner">
@@ -131,10 +95,10 @@
     </div>
   </div>
 
-  <!-- Scripts -->
-  <script src="assets/js/utils.js"></script>
-  <script src="assets/js/auth/auth.js"></script>
-  <script src="assets/js/core/session.js"></script>
+  <!-- MODULE SCRIPTS (IMPORTANT FIX) -->
+  <script type="module" src="assets/js/utils.js"></script>
+  <script type="module" src="assets/js/auth/auth.js"></script>
+  <script type="module" src="assets/js/core/session.js"></script>
 
 </body>
 </html>

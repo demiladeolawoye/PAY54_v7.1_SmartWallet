@@ -1,83 +1,75 @@
-/* =========================================================
-   PAY54 v7.1 — FX Dashboard Wiring
-   Preserves v7.0 UI
-   ========================================================= */
+(function () {
+  // Mock FX table (base → target)
+  const FX_RATES = {
+    NGN: { USD: 0.00067, GBP: 0.00053, EUR: 0.00062 },
+    USD: { NGN: 1500, GBP: 0.79, EUR: 0.92 },
+    GBP: { NGN: 1900, USD: 1.26, EUR: 1.17 },
+    EUR: { NGN: 1650, USD: 1.09, GBP: 0.86 }
+  };
 
-import {
-  getFxState,
-  setFxState,
-  quoteFx
-} from "../core/fx-engine.js";
+  const FX_FEE_RATE = 0.015; // 1.5% fee (mock)
 
-/* -------------------------
-   DOM helpers (safe)
--------------------------- */
-function $(selector) {
-  return document.querySelector(selector);
-}
+  function calculate(sendAmount, from, to) {
+    if (from === to) {
+      return {
+        receive: sendAmount,
+        rate: 1,
+        fee: 0
+      };
+    }
 
-/* -------------------------
-   Render FX quote
--------------------------- */
-function renderFx(state) {
-  const sendInput = $("[data-fx-send-amount]");
-  const recvOutput = $("[data-fx-receive-amount]");
-  const rateEl = $("[data-fx-rate]");
-  const feeEl = $("[data-fx-fee]");
+    const rate = FX_RATES[from][to];
+    const fee = sendAmount * FX_FEE_RATE;
+    const net = sendAmount - fee;
+    const receive = net * rate;
 
-  if (!sendInput || !recvOutput) return;
+    return {
+      rate,
+      fee,
+      receive
+    };
+  }
 
-  const { rate, fee, receiveAmount } = quoteFx(
-    Number(state.sendAmount),
-    state.sendCurrency,
-    state.receiveCurrency,
-    state.feePct
-  );
+  function updateFX() {
+    const sendAmt = Number(document.getElementById("fxSend").value || 0);
+    const from = document.getElementById("fxFrom").value;
+    const to = document.getElementById("fxTo").value;
 
-  recvOutput.textContent = receiveAmount.toLocaleString();
-  if (rateEl) rateEl.textContent = rate.toFixed(4);
-  if (feeEl) feeEl.textContent = fee.toFixed(2);
-}
+    const result = calculate(sendAmt, from, to);
 
-/* -------------------------
-   Bind inputs
--------------------------- */
-function bindFxControls(state) {
-  const sendInput = $("[data-fx-send-amount]");
-  const sendCur = $("[data-fx-send-currency]");
-  const recvCur = $("[data-fx-receive-currency]");
+    document.getElementById("fxRate").innerText = `Rate: 1 ${from} = ${result.rate} ${to}`;
+    document.getElementById("fxFee").innerText = `Fee: ${from} ${result.fee.toFixed(2)}`;
+    document.getElementById("fxReceive").innerText =
+      `${to} ${result.receive.toFixed(2)}`;
+  }
 
-  if (sendInput) {
-    sendInput.addEventListener("input", (e) => {
-      state.sendAmount = Number(e.target.value || 0);
-      setFxState(state);
-      renderFx(state);
+  function confirmFX() {
+    const sendAmt = Number(document.getElementById("fxSend").value || 0);
+    const from = document.getElementById("fxFrom").value;
+    const to = document.getElementById("fxTo").value;
+
+    if (sendAmt <= 0) {
+      alert("Enter amount");
+      return;
+    }
+
+    P54Pin.openPin(() => {
+      P54Wallet.send(sendAmt);
+
+      if (window.P54Receipt) {
+        P54Receipt.openReceipt({
+          type: "fx",
+          amount: sendAmt,
+          currency: from,
+          note: `FX transfer ${from} → ${to}`,
+          date: new Date().toISOString()
+        });
+      }
     });
   }
 
-  if (sendCur) {
-    sendCur.addEventListener("change", (e) => {
-      state.sendCurrency = e.target.value;
-      setFxState(state);
-      renderFx(state);
-    });
-  }
-
-  if (recvCur) {
-    recvCur.addEventListener("change", (e) => {
-      state.receiveCurrency = e.target.value;
-      setFxState(state);
-      renderFx(state);
-    });
-  }
-}
-
-/* -------------------------
-   Init
--------------------------- */
-document.addEventListener("DOMContentLoaded", () => {
-  const state = getFxState();
-  renderFx(state);
-  bindFxControls(state);
-});
-
+  window.P54FX = {
+    updateFX,
+    confirmFX
+  };
+})();

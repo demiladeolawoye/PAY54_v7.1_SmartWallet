@@ -1,1 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>PAY54 • Reset PIN</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#020617" />
+  <link rel="icon" type="image/svg+xml" href="assets/img/pay54-icon.svg" />
+  <link rel="stylesheet" href="assets/css/global.css" />
+  <link rel="stylesheet" href="assets/css/auth.css" />
+</head>
+<body class="auth-body">
+  <div class="auth-wrapper">
+    <header class="auth-header">
+      <div class="auth-logo-pill">
+        <img src="assets/img/pay54-logo.svg" alt="PAY54" class="auth-logo" />
+      </div>
+      <div class="auth-brand-block">
+        <span class="auth-brand">PAY54</span>
+        <span class="auth-sub">Reset your wallet PIN</span>
+      </div>
+    </header>
+
+    <main class="auth-card">
+      <h1 class="auth-title">Reset wallet PIN</h1>
+      <p class="auth-subtitle">
+        This demo will update the PIN stored in your browser only.
+      </p>
+
+      <form id="resetPinForm" class="auth-form">
+        <div class="form-group">
+          <label for="resetId">Registered email or phone</label>
+          <input id="resetId" name="resetId" required />
+        </div>
+        <div class="form-group">
+          <label for="resetNewPin">New PIN (4 digits)</label>
+          <input id="resetNewPin" name="resetNewPin" type="password"
+                 maxlength="4" inputmode="numeric" required />
+        </div>
+        <div class="form-group">
+          <label for="resetConfirmPin">Confirm PIN</label>
+          <input id="resetConfirmPin" name="resetConfirmPin" type="password"
+                 maxlength="4" inputmode="numeric" required />
+        </div>
+        <button type="submit" class="btn-primary">Update PIN</button>
+      </form>
+
+      <div class="auth-footer-text">
+        <span>Remembered it?</span>
+        <a href="index.html" class="link-accent">Back to sign in</a>
+      </div>
+    </main>
+  </div>
+
+  <script src="assets/js/utils.js"></script>
+  <script src="assets/js/reset-pin.js"></script>
+</body>
+</html>
+
 

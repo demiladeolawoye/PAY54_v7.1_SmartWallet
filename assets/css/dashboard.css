@@ -1,1 +1,227 @@
+/* ===============================
+   DASHBOARD BASE
+================================ */
+
+.dashboard-body {
+  min-height: 100vh;
+  font-family: Inter, Arial, sans-serif;
+}
+
+/* ===============================
+   HEADER
+================================ */
+
+.app-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 24px;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+
+body.light .app-header {
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.app-brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.brand-text .brand-name {
+  font-size: 18px;
+  font-weight: 800;
+}
+
+.brand-text .brand-tagline {
+  font-size: 11px;
+  opacity: 0.7;
+}
+
+.app-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.app-actions select,
+.app-actions button {
+  padding: 6px 10px;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+}
+
+/* ===============================
+   MAIN GRID
+================================ */
+
+.dashboard-main {
+  padding: 24px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 20px;
+}
+
+/* ===============================
+   CARDS
+================================ */
+
+.card {
+  padding: 18px;
+  border-radius: 14px;
+  background: rgba(255,255,255,0.06);
+}
+
+body.light .card {
+  background: #f9fafb;
+}
+
+.card h3 {
+  margin-bottom: 10px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+/* ===============================
+   BALANCE
+================================ */
+
+.balance-amount {
+  font-size: 28px;
+  font-weight: 800;
+  margin-top: 8px;
+}
+
+/* ===============================
+   ACTIONS
+================================ */
+
+.actions-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+}
+
+.actions-grid button {
+  padding: 10px;
+  border-radius: 8px;
+  border: none;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+/* ===============================
+   TRANSACTIONS
+================================ */
+
+.tx-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.tx-list li {
+  display: flex;
+  justify-content: space-between;
+  font-size: 13px;
+  padding: 6px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+
+body.light .tx-list li {
+  border-bottom: 1px solid #e5e7eb;
+}
+
+/* ===============================
+   FX CARD
+================================ */
+
+.fx-card input,
+.fx-card select {
+  width: 100%;
+  padding: 8px;
+  border-radius: 6px;
+  border: none;
+}
+
+.fx-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 10px;
+}
+
+.fx-summary {
+  margin: 10px 0;
+  font-size: 13px;
+  opacity: 0.85;
+}
+
+.fx-card button {
+  width: 100%;
+  padding: 10px;
+  border-radius: 8px;
+  border: none;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+/* ===============================
+   MODALS (PIN + RECEIPT)
+================================ */
+
+.pin-modal,
+.receipt-modal {
+  position: fixed;
+  inset: 0;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0,0,0,0.6);
+  z-index: 1000;
+}
+
+.pin-card,
+.receipt-card {
+  background: #ffffff;
+  color: #111;
+  padding: 22px;
+  border-radius: 14px;
+  width: 320px;
+  text-align: center;
+}
+
+body.dark .pin-card,
+body.dark .receipt-card {
+  background: #0B1C2D;
+  color: #ffffff;
+}
+
+.pin-card input {
+  width: 100%;
+  padding: 10px;
+  margin-top: 10px;
+  text-align: center;
+  font-size: 18px;
+}
+
+.pin-actions button,
+.receipt-actions button,
+.receipt-actions a {
+  margin-top: 10px;
+  width: 100%;
+  padding: 10px;
+  border-radius: 8px;
+  border: none;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.receipt-actions a {
+  display: block;
+  background: #25D366;
+  color: #fff;
+  text-decoration: none;
+}
 

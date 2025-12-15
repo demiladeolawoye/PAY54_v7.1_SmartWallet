@@ -1,79 +1,51 @@
-/* =========================================================
-   PAY54 v7.1 — Reset PIN Logic
-   Behaviour matches v6.7 exactly
-   ========================================================= */
+// reset-pin.js – update stored PIN (demo)
 
-import {
-  getUser,
-  setUser,
-  clearSession,
-  clearOtp
-} from "../core/state.js";
+(function () {
+  const form = document.getElementById("resetPinForm");
+  if (!form) return;
 
-/* -------------------------
-   Utilities
--------------------------- */
-function $(id) {
-  return document.getElementById(id);
-}
+  const STORAGE_KEY = "pay54_demo_user";
 
-function showError(message) {
-  alert(message); // v6.7 behaviour
-}
-
-/* -------------------------
-   Reset PIN Logic
--------------------------- */
-const resetForm = $("resetPinForm");
-
-if (resetForm) {
-  resetForm.addEventListener("submit", (e) => {
+  form.addEventListener("submit", (e) => {
     e.preventDefault();
+    const id = document.getElementById("resetId").value.trim();
+    const newPin = document.getElementById("resetNewPin").value.trim();
+    const confirmPin = document
+      .getElementById("resetConfirmPin")
+      .value.trim();
 
-    const identifier = $("resetId")?.value.trim();
-    const newPin = $("resetNewPin")?.value.trim();
-    const confirmPin = $("resetConfirmPin")?.value.trim();
-
-    const user = getUser();
-
-    if (!user) {
-      showError("No account found.");
-      window.location.replace("index.html");
+    if (newPin.length !== 4 || !/^\d+$/.test(newPin)) {
+      alert("PIN must be 4 digits.");
       return;
     }
-
-    if (
-      identifier !== user.email &&
-      identifier !== user.phone
-    ) {
-      showError("Email or phone not recognised.");
-      return;
-    }
-
-    if (!/^\d{4}$/.test(newPin)) {
-      showError("PIN must be exactly 4 digits.");
-      return;
-    }
-
     if (newPin !== confirmPin) {
-      showError("PINs do not match.");
+      alert("PIN and confirmation do not match.");
       return;
     }
 
-    // Update PIN
-    setUser({
-      ...user,
-      pin: newPin
-    });
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) {
+      alert("No PAY54 profile found for this browser.");
+      return;
+    }
 
-    // Clear any active session or OTP
-    clearSession?.();
-    clearOtp?.();
+    let user;
+    try {
+      user = JSON.parse(raw);
+    } catch {
+      alert("Corrupted demo profile. Please sign up again.");
+      return;
+    }
 
-    alert("PIN updated successfully. Please sign in.");
+    if (id !== user.email && id !== user.phone) {
+      alert("Details do not match our demo record.");
+      return;
+    }
 
-    // Back to login
-    window.location.replace("index.html");
+    user.pin = newPin;
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(user));
+    alert("PIN updated for this demo profile. Please sign in again.");
+    window.location.href = "index.html";
   });
-}
+})();
 

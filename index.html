@@ -5,100 +5,90 @@
   <title>PAY54 • Sign in</title>
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="description"
-        content="PAY54 – One Wallet Everywhere • NG ↔ Global" />
   <meta name="theme-color" content="#020617" />
 
-  <!-- Icon -->
-  <link rel="icon" type="image/svg+xml" href="assets/img/logo/pay54-icon.svg" />
+  <!-- Icons -->
+  <link rel="icon" href="assets/img/logo/pay54-icon.svg" />
 
-  <!-- Styles -->
+  <!-- Styles (v6.7 LOCKED) -->
   <link rel="stylesheet" href="assets/css/global.css" />
   <link rel="stylesheet" href="assets/css/auth.css" />
 </head>
 
 <body class="auth-body">
 
+  <!-- Top demo banner -->
+  <div class="demo-banner">
+    🔒 PAY54 DEMO VERSION — Wallet UI simulation only. No real payments processed.
+  </div>
+
   <div class="auth-wrapper">
 
     <!-- Header -->
     <header class="auth-header">
-      <div class="auth-logo-pill"></div>
-      <div class="auth-brand-block">
-        <span class="auth-brand">PAY54</span>
-        <span class="auth-sub">
-          One Wallet Everywhere • NG ↔ Global
-        </span>
+      <div class="auth-logo-pill">P54</div>
+      <div class="auth-brand">
+        <strong>PAY54</strong>
+        <span>One Wallet Everywhere • NG ↔ Global</span>
       </div>
     </header>
 
     <div class="auth-layout">
 
-      <!-- LOGIN CARD -->
+      <!-- LEFT: LOGIN CARD -->
       <main class="auth-card">
-        <h1 class="auth-title">Sign in to PAY54</h1>
-        <p class="auth-subtitle">
+        <h1>Sign in to PAY54</h1>
+        <p class="auth-sub">
           Secure login • PIN + device. Demo stores data locally.
         </p>
 
-        <form id="loginForm" class="auth-form">
+        <form id="loginForm">
+          <label>Email or phone</label>
+          <input id="loginId" required />
 
-          <div class="form-group">
-            <label>Email or phone</label>
-            <input id="loginId" required />
+          <label>Wallet PIN (4 digits)</label>
+          <div class="pin-row">
+            <input id="loginPin" type="password" maxlength="4" required />
+            <button type="button" data-eye="loginPin">👁</button>
           </div>
 
-          <div class="form-group">
-            <label>Wallet PIN (4 digits)</label>
-            <div class="password-row">
-              <input id="loginPin" type="password" maxlength="4" required />
-              <button type="button" class="eye-toggle" data-target="loginPin">👁</button>
-            </div>
-          </div>
-
-          <div class="form-row">
-            <label class="remember-check">
-              <input type="checkbox" />
-              <span>Remember this device</span>
+          <div class="login-row">
+            <label>
+              <input type="checkbox" id="rememberDevice" />
+              Remember this device
             </label>
-            <a href="reset-pin.html" class="link-small">Forgot PIN?</a>
+            <a href="reset-pin.html">Forgot PIN?</a>
           </div>
 
-          <button class="btn-primary" type="submit">
+          <button type="submit" class="btn-primary">
             Sign in to PAY54
           </button>
         </form>
 
-        <div class="auth-footer-text">
-          <span>New to PAY54?</span>
-          <a href="signup.html" class="link-accent">Create account</a>
-        </div>
+        <p class="auth-footer">
+          New to PAY54?
+          <a href="signup.html">Create account</a>
+        </p>
       </main>
 
-      <!-- WHY PAY54 -->
+      <!-- RIGHT: WHY PAY54 -->
       <aside class="auth-side">
-        <h2 class="why-title">Why PAY54?</h2>
-
-        <ul class="why-list">
+        <h2>Why PAY54?</h2>
+        <ul>
           <li>⚡ Instant P2P transfers and bank payouts across NGN & FX rails.</li>
           <li>🌍 Cross-border FX rails (NGN ⇄ USD / GBP / EUR).</li>
           <li>💳 Virtual & linked cards, Smart Checkout and Shop on the Fly.</li>
-          <li>🛡 Secure PIN, device checks and clear risk alerts.</li>
+          <li>🛡  Secure PIN, device checks and clear risk alerts.</li>
           <li>💰 Savings pots, investments, stocks, bills & bet funding.</li>
         </ul>
-
-        <p class="auth-banner">
-          PAY54 DEMO — UI simulation only. No real payments processed.
-        </p>
       </aside>
 
     </div>
   </div>
 
-  <!-- MODULE SCRIPTS (IMPORTANT FIX) -->
-  <script type="module" src="assets/js/utils.js"></script>
-  <script type="module" src="assets/js/auth/auth.js"></script>
+  <!-- JS (MODULES — THIS FIXES EVERYTHING) -->
   <script type="module" src="assets/js/core/session.js"></script>
+  <script type="module" src="assets/js/auth/auth.js"></script>
 
 </body>
 </html>

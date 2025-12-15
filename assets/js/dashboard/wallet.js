@@ -1,86 +1,114 @@
-/* =========================================================
-   PAY54 v7.1 — Dashboard Wallet Hydration
-   Preserves v7.0 UI completely
-   ========================================================= */
+(function () {
+  const WALLET_KEY = "p54_wallet";
+  const DEFAULT_WALLET = {
+    currency: "NGN",
+    balances: {
+      NGN: 52000,
+      USD: 120,
+      GBP: 80,
+      EUR: 95
+    },
+    transactions: []
+  };
 
-import {
-  getWallet,
-  setCurrency
-} from "../core/wallet-state.js";
+  // Load wallet from localStorage or use defaults
+  function loadWallet() {
+    return JSON.parse(localStorage.getItem(WALLET_KEY)) || DEFAULT_WALLET;
+  }
 
-/* -------------------------
-   DOM helpers (safe)
--------------------------- */
-function $(selector) {
-  return document.querySelector(selector);
-}
+  // Save wallet back to localStorage
+  function saveWallet(wallet) {
+    localStorage.setItem(WALLET_KEY, JSON.stringify(wallet));
+  }
 
-function $all(selector) {
-  return document.querySelectorAll(selector);
-}
+  // Get currency symbol for display
+  function getSymbol(c) {
+    return { NGN: "₦", USD: "$", GBP: "£", EUR: "€" }[c];
+  }
 
-/* -------------------------
-   Render functions
--------------------------- */
-function renderBalance(wallet) {
-  const el = $("[data-wallet-balance]");
-  if (!el) return;
+  // Render wallet to the page
+  function render() {
+    const wallet = loadWallet();
+    const balanceEl = document.getElementById("walletBalance");
+    const txEl = document.getElementById("txList");
 
-  const amount = wallet.balances[wallet.currency] ?? 0;
-  el.textContent = `${wallet.currency} ${amount.toLocaleString()}`;
-}
+    if (balanceEl) {
+      balanceEl.innerText =
+        getSymbol(wallet.currency) + wallet.balances[wallet.currency].toFixed(2);
+    }
 
-function renderCurrency(wallet) {
-  const el = $("[data-wallet-currency]");
-  if (!el) return;
-  el.textContent = wallet.currency;
-}
+    if (txEl) {
+      txEl.innerHTML = "";
+      wallet.transactions.slice(0, 5).forEach(tx => {
+        const li = document.createElement("li");
+        li.innerHTML = `
+          <span>${tx.note}</span>
+          <strong>${getSymbol(tx.currency)}${tx.amount.toFixed(2)}</strong>
+        `;
+        txEl.appendChild(li);
+      });
+    }
+  }
 
-function renderTransactions(wallet) {
-  const list = $("[data-tx-list]");
-  if (!list) return;
-
-  list.innerHTML = "";
-
-  wallet.transactions.forEach(tx => {
-    const row = document.createElement("div");
-    row.className = "tx-row";
-    row.innerHTML = `
-      <span>${tx.label}</span>
-      <strong>${tx.currency} ${tx.amount.toLocaleString()}</strong>
-    `;
-    list.appendChild(row);
-  });
-}
-
-/* -------------------------
-   Currency switch
--------------------------- */
-function bindCurrencySwitch(wallet) {
-  $all("[data-currency]").forEach(btn => {
-    btn.addEventListener("click", () => {
-      const code = btn.getAttribute("data-currency");
-      const updated = setCurrency(code);
-      render(updated);
+  // Adjust the balance, either adding or subtracting money
+  function adjust(amount, type, note) {
+    const wallet = loadWallet();
+    wallet.balances[wallet.currency] += amount;
+    wallet.transactions.unshift({
+      type,
+      amount,
+      currency: wallet.currency,
+      note,
+      date: new Date().toISOString()
     });
-  });
-}
+    saveWallet(wallet);
+    render();
 
-/* -------------------------
-   Render all
--------------------------- */
-function render(wallet) {
-  renderBalance(wallet);
-  renderCurrency(wallet);
-  renderTransactions(wallet);
-}
+    // Trigger receipt modal
+    if (window.P54Receipt) {
+      P54Receipt.openReceipt({
+        type,
+        amount,
+        currency: wallet.currency,
+        note,
+        date: new Date().toISOString()
+      });
+    }
+  }
 
-/* -------------------------
-   Init
--------------------------- */
-document.addEventListener("DOMContentLoaded", () => {
-  const wallet = getWallet();
-  render(wallet);
-  bindCurrencySwitch(wallet);
-});
+  // Set the wallet's currency and re-render
+  function setCurrency(currency) {
+    const wallet = loadWallet();
+    wallet.currency = currency;
+    saveWallet(wallet);
+    render();
+  }
+
+  // Handle sending money
+  function send(amount) {
+    P54Pin.openPin(() => adjust(-amount, "debit", "Send money"));
+  }
+
+  // Handle adding money
+  function add(amount) {
+    adjust(amount, "credit", "Wallet top-up");
+  }
+
+  // Handle withdrawing money
+  function withdraw(amount) {
+    P54Pin.openPin(() => adjust(-amount, "debit", "Withdraw"));
+  }
+
+  // Expose methods globally
+  window.P54Wallet = {
+    render,
+    setCurrency,
+    add,
+    send,
+    withdraw
+  };
+
+  // Initialize on page load
+  document.addEventListener("DOMContentLoaded", render);
+})();
 

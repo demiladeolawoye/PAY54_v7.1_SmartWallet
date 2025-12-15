@@ -1,79 +1,36 @@
+(function () {
+  function openReceipt(tx) {
+    const modal = document.getElementById("receiptModal");
+    if (!modal) return;
 
-/* =========================================================
-   PAY54 v7.1 — Receipt Wiring (Dashboard)
-   Preserves v7.0 UI
-   ========================================================= */
+    document.getElementById("rType").innerText = tx.type.toUpperCase();
+    document.getElementById("rAmount").innerText =
+      `${symbol(tx.currency)}${tx.amount.toFixed(2)}`;
+    document.getElementById("rNote").innerText = tx.note;
+    document.getElementById("rDate").innerText =
+      new Date(tx.date).toLocaleString();
 
-import { addTransaction, getWallet } from "../core/wallet-state.js";
-import { createReceipt, getLastReceipt } from "../core/receipt-engine.js";
+    const msg =
+      `PAY54 Receipt%0A` +
+      `Type: ${tx.type}%0A` +
+      `Amount: ${symbol(tx.currency)}${tx.amount.toFixed(2)}%0A` +
+      `Note: ${tx.note}%0A` +
+      `Date: ${new Date(tx.date).toLocaleString()}`;
 
-/* -------------------------
-   DOM helpers (safe)
--------------------------- */
-function $(selector) {
-  return document.querySelector(selector);
-}
+    document.getElementById("waShare").href =
+      `https://wa.me/?text=${msg}`;
 
-/* -------------------------
-   Confirm transaction
--------------------------- */
-function confirmTransaction(payload) {
-  // Persist transaction
-  addTransaction({
-    type: payload.type,
-    currency: payload.currency,
-    amount: payload.amount,
-    label: payload.label
-  });
-
-  // Create receipt
-  createReceipt(payload);
-
-  // Optional UI hook
-  const receiptEl = $("[data-receipt-status]");
-  if (receiptEl) {
-    receiptEl.textContent = "Transaction successful";
+    modal.style.display = "flex";
   }
-}
 
-/* -------------------------
-   Bind confirmation buttons
--------------------------- */
-function bindConfirmActions() {
-  document.addEventListener("click", (e) => {
-    const btn = e.target.closest("[data-confirm-tx]");
-    if (!btn) return;
+  function closeReceipt() {
+    document.getElementById("receiptModal").style.display = "none";
+  }
 
-    e.preventDefault();
+  function symbol(c) {
+    return { NGN: "₦", USD: "$", GBP: "£", EUR: "€" }[c];
+  }
 
-    // Pull attributes from button (v7.0 safe pattern)
-    const payload = {
-      type: btn.getAttribute("data-tx-type") || "debit",
-      currency: btn.getAttribute("data-tx-currency") || "NGN",
-      amount: Number(btn.getAttribute("data-tx-amount") || 0),
-      label: btn.getAttribute("data-tx-label") || "Wallet transaction",
-      meta: {}
-    };
-
-    confirmTransaction(payload);
-  });
-}
-
-/* -------------------------
-   Hydrate last receipt (optional)
--------------------------- */
-function hydrateReceipt() {
-  const receipt = getLastReceipt();
-  if (!receipt) return;
-
-  const el = $("[data-receipt-id]");
-  if (el) el.textContent = receipt.id;
-}
-
-/* -------------------------
-   Init
--------------------------- */
-document.addEventListener("DOMContentLoaded", () => {
-  bindConfirmActions();
-  hydrateReceipt();
-});
+  // expose globally
+  window.P54Receipt = { openReceipt, closeReceipt };
+})();

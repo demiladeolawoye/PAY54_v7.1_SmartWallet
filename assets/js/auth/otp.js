@@ -1,52 +1,31 @@
-/* =========================================================
-   PAY54 v7.1 — OTP Logic (Mocked, v6.7 style)
-   OTP code: 123456
-   ========================================================= */
+// otp.js – simple demo OTP (123456)
 
-import {
-  getUser,
-  setSession,
-  setOtpVerified
-} from "../core/state.js";
+(function () {
+  const form = document.getElementById("otpForm");
+  if (!form) return;
 
-/* -------------------------
-   Utilities
--------------------------- */
-function $(id) {
-  return document.getElementById(id);
-}
+  const inputs = form.querySelectorAll(".otp-row input");
 
-function showError(message) {
-  alert(message); // v6.7 behaviour
-}
+  // auto move focus
+  inputs.forEach((input, idx) => {
+    input.addEventListener("input", () => {
+      if (input.value && idx < inputs.length - 1) {
+        inputs[idx + 1].focus();
+      }
+    });
+  });
 
-/* -------------------------
-   OTP Logic
--------------------------- */
-const otpForm = $("otpForm");
-
-if (otpForm) {
-  otpForm.addEventListener("submit", (e) => {
+  form.addEventListener("submit", (e) => {
     e.preventDefault();
-
-    const user = getUser();
-    if (!user) {
-      showError("No signup session found.");
-      window.location.replace("index.html");
-      return;
-    }
-
-    // Collect OTP input (supports single or multiple input fields)
-    let enteredOtp = "";
-
-    const otpInputs = document.querySelectorAll(
-      "input[data-otp], .otp-input, .otp-box"
-    );
-
-    if (otpInputs.length > 0) {
-      otpInputs.forEach((input) => {
-        enteredOtp += input.value.trim();
-      });
+    let code = "";
+    inputs.forEach((i) => (code += i.value));
+    if (code === "123456") {
+      localStorage.setItem("pay54_verified", "1");
+      alert("OTP verified. You can now sign in.");
+      window.location.href = "index.html";
     } else {
-      // Fallback single input
+      alert("Incorrect OTP. For this demo, use 123456.");
+    }
+  });
+})();
 

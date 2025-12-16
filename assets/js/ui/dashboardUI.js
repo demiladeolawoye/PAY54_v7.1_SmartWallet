@@ -1315,7 +1315,6 @@ function viewAllTx() {
 ------------------------*/
 function wire() {
   // Session protection first
-  requireSessionOrRedirect();
 
   // Theme
   initTheme();

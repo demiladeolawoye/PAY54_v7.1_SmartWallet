@@ -4,53 +4,43 @@
   <meta charset="UTF-8" />
   <title>PAY54 • Verify OTP</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="theme-color" content="#020617" />
-  <link rel="icon" type="image/svg+xml" href="assets/img/pay54-icon.svg" />
   <link rel="stylesheet" href="assets/css/global.css" />
   <link rel="stylesheet" href="assets/css/auth.css" />
 </head>
+
 <body class="auth-body">
   <div class="auth-wrapper">
     <header class="auth-header">
-      <div class="auth-logo-pill">
-        <img src="assets/img/pay54-logo.svg" alt="PAY54" class="auth-logo" />
-      </div>
+      <div class="auth-logo-pill">P54</div>
       <div class="auth-brand-block">
         <span class="auth-brand">PAY54</span>
-        <span class="auth-sub">Secure verification</span>
+        <span class="auth-sub">Verify your account</span>
       </div>
     </header>
 
     <main class="auth-card">
       <h1 class="auth-title">Enter OTP</h1>
       <p class="auth-subtitle">
-        We have “sent” a 6-digit OTP to your email/phone. For this demo, use
-        <strong>123456</strong>.
+        For demo purposes, use <strong>123456</strong>
       </p>
 
-      <form id="otpForm" class="auth-form">
+      <form id="otpForm">
         <div class="otp-row">
-          <input maxlength="1" inputmode="numeric" required />
-          <input maxlength="1" inputmode="numeric" required />
-          <input maxlength="1" inputmode="numeric" required />
-          <input maxlength="1" inputmode="numeric" required />
-          <input maxlength="1" inputmode="numeric" required />
-          <input maxlength="1" inputmode="numeric" required />
+          <input maxlength="1" />
+          <input maxlength="1" />
+          <input maxlength="1" />
+          <input maxlength="1" />
+          <input maxlength="1" />
+          <input maxlength="1" />
         </div>
-        <button type="submit" class="btn-primary" style="margin-top:12px;">
-          Verify & continue
+
+        <button type="submit" class="btn-primary">
+          Verify OTP
         </button>
       </form>
-
-      <div class="auth-footer-text">
-        <span>Wrong details?</span>
-        <a href="signup.html" class="link-accent">Edit signup</a>
-      </div>
     </main>
   </div>
 
-  <script src="assets/js/utils.js"></script>
   <script src="assets/js/otp.js"></script>
 </body>
 </html>
-

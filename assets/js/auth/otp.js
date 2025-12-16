@@ -1,5 +1,4 @@
-// otp.js — demo OTP (123456)
-
+// otp.js — demo OTP = 123456
 (function () {
   const form = document.getElementById("otpForm");
   if (!form) return;
@@ -12,7 +11,7 @@
     });
   });
 
-  form.addEventListener("submit", e => {
+  form.addEventListener("submit", (e) => {
     e.preventDefault();
     const code = [...inputs].map(i => i.value).join("");
 
@@ -21,7 +20,7 @@
       alert("OTP verified. Please sign in.");
       window.location.href = "login.html";
     } else {
-      alert("Incorrect OTP. Use 123456.");
+      alert("Invalid OTP. Use 123456.");
     }
   });
 })();

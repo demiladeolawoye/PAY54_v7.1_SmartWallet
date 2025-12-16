@@ -1,36 +1,20 @@
-// session.js – simple front-end session protection
-
+// session.js — single session guard (FINAL)
 (function () {
   const SESSION_KEY = "pay54_session_active";
-
-  function sessionActive() {
-    return localStorage.getItem(SESSION_KEY) === "1";
-  }
-
-  const path = window.location.pathname;
+  const active = () => localStorage.getItem(SESSION_KEY) === "1";
+  const path = location.pathname;
 
   // Protect dashboard
-  if (path.endsWith("dashboard.html")) {
-    if (!sessionActive()) {
-      window.location.href = "index.html";
-    }
+  if (path.endsWith("dashboard.html") && !active()) {
+    location.replace("login.html");
   }
 
-  // Optional: redirect logged-in users away from login page
-  if (path.endsWith("index.html") || path.endsWith("login.html") || path === "/") {
-    if (sessionActive()) {
-      // you can auto-forward them if you want:
-      // window.location.href = "dashboard.html";
-    }
-  }
-
-  // Logout button
-  const btnLogout = document.getElementById("btnLogout");
-  if (btnLogout) {
-    btnLogout.addEventListener("click", () => {
+  // Logout
+  const logoutBtn = document.getElementById("logoutBtn");
+  if (logoutBtn) {
+    logoutBtn.addEventListener("click", () => {
       localStorage.removeItem(SESSION_KEY);
-      window.location.href = "index.html";
+      location.href = "login.html";
     });
   }
 })();
-

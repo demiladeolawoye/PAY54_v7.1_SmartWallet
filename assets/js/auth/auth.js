@@ -1,99 +1,89 @@
-// auth.js – signup + login logic for PAY54 demo
+// auth.js — PAY54 v7.1 (v6.7-compatible)
 
 (function () {
-  const STORAGE_KEY = "pay54_demo_user";
+  const USER_KEY = "pay54_demo_user";
   const SESSION_KEY = "pay54_session_active";
   const VERIFIED_KEY = "pay54_verified";
 
-  function saveUser(user) {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(user));
-  }
-
   function getUser() {
-    const raw = localStorage.getItem(STORAGE_KEY);
-    if (!raw) return null;
-    try {
-      return JSON.parse(raw);
-    } catch {
-      return null;
-    }
+    const raw = localStorage.getItem(USER_KEY);
+    return raw ? JSON.parse(raw) : null;
   }
 
-  function setSessionActive() {
+  function saveUser(user) {
+    localStorage.setItem(USER_KEY, JSON.stringify(user));
+  }
+
+  function setSession() {
     localStorage.setItem(SESSION_KEY, "1");
   }
 
-  // Expose for other scripts
-  window.pay54Auth = { getUser, saveUser, setSessionActive };
-
-  // 🔹 Eye toggles
-  document.querySelectorAll(".eye-toggle").forEach((btn) => {
+  // 🔐 Eye toggle
+  document.querySelectorAll(".eye-toggle").forEach(btn => {
     btn.addEventListener("click", () => {
-      const id = btn.getAttribute("data-target");
+      const id = btn.dataset.target;
       const input = document.getElementById(id);
-      if (!input) return;
-      input.type = input.type === "password" ? "text" : "password";
+      if (input) {
+        input.type = input.type === "password" ? "text" : "password";
+      }
     });
   });
 
-  // 🔹 Signup form
+  // 🆕 SIGNUP
   const signupForm = document.getElementById("signupForm");
   if (signupForm) {
-    signupForm.addEventListener("submit", (e) => {
+    signupForm.addEventListener("submit", e => {
       e.preventDefault();
-      const name = document.getElementById("signupName").value.trim();
-      const email = document.getElementById("signupEmail").value.trim();
-      const phone = document.getElementById("signupPhone").value.trim();
-      const pin = document.getElementById("signupPin").value.trim();
-      const pin2 = document.getElementById("signupPinConfirm").value.trim();
 
-      if (pin.length !== 4 || !/^\d+$/.test(pin)) {
-        alert("PIN must be 4 digits.");
-        return;
-      }
-      if (pin !== pin2) {
-        alert("PIN and confirmation do not match.");
+      const name = signupName.value.trim();
+      const email = signupEmail.value.trim();
+      const phone = signupPhone.value.trim();
+      const pin = signupPin.value.trim();
+      const pin2 = signupPinConfirm.value.trim();
+
+      if (pin !== pin2 || !/^\d{4}$/.test(pin)) {
+        alert("PIN must be 4 digits and match.");
         return;
       }
 
       saveUser({ name, email, phone, pin });
       localStorage.removeItem(VERIFIED_KEY);
+
+      alert("Account created. Proceeding to OTP verification.");
       window.location.href = "verify.html";
     });
   }
 
-  // 🔹 Login form
+  // 🔑 LOGIN
   const loginForm = document.getElementById("loginForm");
   if (loginForm) {
-    loginForm.addEventListener("submit", (e) => {
+    loginForm.addEventListener("submit", e => {
       e.preventDefault();
-      const id = document.getElementById("loginId").value.trim();
-      const pin = document.getElementById("loginPin").value.trim();
+
+      const id = loginId.value.trim();
+      const pin = loginPin.value.trim();
       const user = getUser();
 
       if (!user) {
-        alert("No PAY54 profile found. Please create an account first.");
+        alert("No account found. Please create one.");
         window.location.href = "signup.html";
         return;
       }
 
-      const idMatches = id === user.email || id === user.phone;
-      const pinMatches = pin === user.pin;
-
-      if (!idMatches || !pinMatches) {
-        alert("Incorrect details. Check email/phone and PIN.");
+      if ((id !== user.email && id !== user.phone) || pin !== user.pin) {
+        alert("Incorrect login details.");
         return;
       }
 
       if (localStorage.getItem(VERIFIED_KEY) !== "1") {
-        alert("Please complete OTP verification first.");
+        alert("Please complete OTP verification.");
         window.location.href = "verify.html";
         return;
       }
 
-      setSessionActive();
+      setSession();
+      alert("Login successful.");
       window.location.href = "dashboard.html";
     });
   }
 })();
-

@@ -1,51 +1,39 @@
-// reset-pin.js – update stored PIN (demo)
+// reset-pin.js — PAY54 demo
 
 (function () {
   const form = document.getElementById("resetPinForm");
   if (!form) return;
 
-  const STORAGE_KEY = "pay54_demo_user";
-
-  form.addEventListener("submit", (e) => {
+  form.addEventListener("submit", e => {
     e.preventDefault();
-    const id = document.getElementById("resetId").value.trim();
-    const newPin = document.getElementById("resetNewPin").value.trim();
-    const confirmPin = document
-      .getElementById("resetConfirmPin")
-      .value.trim();
 
-    if (newPin.length !== 4 || !/^\d+$/.test(newPin)) {
-      alert("PIN must be 4 digits.");
-      return;
-    }
-    if (newPin !== confirmPin) {
-      alert("PIN and confirmation do not match.");
-      return;
-    }
+    const id = resetId.value.trim();
+    const pin = resetNewPin.value.trim();
+    const pin2 = resetConfirmPin.value.trim();
 
-    const raw = localStorage.getItem(STORAGE_KEY);
+    const raw = localStorage.getItem("pay54_demo_user");
     if (!raw) {
-      alert("No PAY54 profile found for this browser.");
+      alert("No account found.");
       return;
     }
 
-    let user;
-    try {
-      user = JSON.parse(raw);
-    } catch {
-      alert("Corrupted demo profile. Please sign up again.");
-      return;
-    }
+    const user = JSON.parse(raw);
 
     if (id !== user.email && id !== user.phone) {
-      alert("Details do not match our demo record.");
+      alert("Details do not match our records.");
       return;
     }
 
-    user.pin = newPin;
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(user));
-    alert("PIN updated for this demo profile. Please sign in again.");
-    window.location.href = "index.html";
+    if (pin !== pin2 || !/^\d{4}$/.test(pin)) {
+      alert("PIN must be 4 digits and match.");
+      return;
+    }
+
+    user.pin = pin;
+    localStorage.setItem("pay54_demo_user", JSON.stringify(user));
+    localStorage.removeItem("pay54_session_active");
+
+    alert("PIN updated successfully. Please sign in.");
+    window.location.href = "login.html";
   });
 })();
-
